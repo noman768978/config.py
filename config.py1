@@ -1,0 +1,48 @@
+import os
+from typing import Dict, Any
+
+class SystemConfig:
+    """System configuration class"""
+    
+    # Gemini API Configuration
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "YOUR_API_KEY_HERE")
+    DEFAULT_MODEL = "gemini-pro"
+    
+    # Agent Configuration
+    DEFAULT_TEMPERATURE = 0.7
+    DEFAULT_MAX_TOKENS = 1000
+    
+    # Execution Configuration
+    ASYNC_TIMEOUT = 30
+    STREAMING_CHUNK_SIZE = 1024
+    
+    # Logging Configuration
+    LOG_LEVEL = "INFO"
+    LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+    @classmethod
+    def get_agent_config(cls, name: str) -> Dict[str, Any]:
+        """Get configuration for specific agent"""
+        return {
+            "name": name,
+            "model_name": cls.DEFAULT_MODEL,
+            "temperature": cls.DEFAULT_TEMPERATURE,
+            "max_tokens": cls.DEFAULT_MAX_TOKENS,
+            "api_key": cls.GEMINI_API_KEY
+        }
+    
+    @classmethod
+    def validate_config(cls) -> bool:
+        """Validate system configuration"""
+        if cls.GEMINI_API_KEY == "YOUR_API_KEY_HERE":
+            print("⚠️  Warning: Please set your GEMINI_API_KEY")
+            return False
+        return True
+
+# Usage example
+if __name__ == "__main__":
+    config = SystemConfig()
+    if config.validate_config():
+        print("✅ Configuration is valid")
+    else:
+        print("❌ Configuration needs attention")
